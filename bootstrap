@@ -5,5 +5,6 @@ import os
 
 if len(sys.argv) == 2:
     os.system(f"composer create-project roots/bedrock {sys.argv[1]}")
+    os.system(f"mv {sys.argv[1]}/* ./")
 else:
     print("\nBootstrap:\nPlease specify name of the bedrock project as arg.\nexample:\n\t./bootstrap name")
