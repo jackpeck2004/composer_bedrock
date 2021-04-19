@@ -2,5 +2,5 @@
 
 ProjectName="docker-bedrock"
 
-comoser create-project roots/bedrock $ProjectName
+composer create-project roots/bedrock $ProjectName
 
