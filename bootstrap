@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
 
-import sys
+from distutils.dir_util import copy_tree
+import shutil
 import os
 
-if len(sys.argv) == 2:
-    os.system(f"composer create-project roots/bedrock {sys.argv[1]}")
-    os.system(f"mv {sys.argv[1]}/* ./")
-else:
-    print("\nBootstrap:\nPlease specify name of the bedrock project as arg.\nexample:\n\t./bootstrap name")
+src_dir = 'test'
+dst_dir = '.'
+
+os.system(f"composer create-project roots/bedrock {src_dir}")
+
+copy_tree(src_dir, dst_dir)
+
+with open(".gitignore", "a") as f:
+    f.write("tmp")
+
+shutil.rmtree(src_dir)
+os.remove("bootstrap")
+
