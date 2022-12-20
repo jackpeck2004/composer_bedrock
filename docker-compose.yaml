@@ -5,7 +5,7 @@ services:
     depends_on:
       - db
       - memcached
-    image: quay.io/presslabs/wordpress-runtime:bedrock
+    image: docker.io/bitpoke/wordpress-runtime:bedrock-php-8.1
     volumes:
       - ./:/app
     ports:
@@ -14,8 +14,9 @@ services:
     environment:
       DB_HOST: db:3306
       DB_USER: wordpress
-      DB_PASSWORD: not-so-secure
-      DB_NAME: wordpress
+      DB_PASSWORD: wordpress
+      DB_NAME: wp_bedrock
+      DB_PREFIX: wp_
       MEMCACHED_HOST: memcached:11211
       WP_HOME: http://localhost:8080
       WP_SITEURL: http://localhost:8080/wp
@@ -23,9 +24,9 @@ services:
 
   db:
     image: percona:5.7
-    volumes:
-      - db_data:/var/lib/mysql
     restart: always
+    volumes:
+      - ./tmp/percona:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: wp_bedrock
@@ -35,5 +36,16 @@ services:
   memcached:
     image: memcached:1.5
 
-volumes:
-  db_data: {}
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
